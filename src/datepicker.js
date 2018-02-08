@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import './datepicker.css';
 
 class Datepicker extends Component {
@@ -26,6 +27,7 @@ class Datepicker extends Component {
 
 const Calendar = () => (
   <div className="calendar">
+    {moment().format('YYYY-MM-DD')}
   </div>
 );
 
