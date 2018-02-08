@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './datepicker.css';
 
 class Datepicker extends Component {
   constructor(props) {
@@ -16,10 +17,16 @@ class Datepicker extends Component {
   render() {
     return (
       <div className="datepicker">
-        <input type="text" name="" readOnly onClick={this.onInputBoxClicked} />
+        <input type="text" readOnly onClick={this.onInputBoxClicked} />
+        {this.state.visible ? <Calendar /> : null}
       </div>
     );
   }
 }
+
+const Calendar = () => (
+  <div className="calendar">
+  </div>
+);
 
 export default Datepicker;
