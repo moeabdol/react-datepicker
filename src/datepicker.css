@@ -1,5 +1,54 @@
+.btn {
+  width: 120px;
+}
+
+.datepicker input {
+  background-color: #FFFFFF !important;
+}
+
+.datepicker input[type="text"]:focus {
+  border: 1px solid #CED4DA;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
 .calendar {
+  position: absolute;
   height: 200px;
   width: 200px;
-  border: 1px solid #000000;
+  border: 1px solid #CED4DA;
+  border-radius: 3px;
+  margin-top: 3px;
+  background-color: white;
+  padding: 10px;
+}
+
+.year-header {
+  text-align: center;
+}
+
+.year-header h6 {
+  font-size: 15px;
+}
+
+.year-header h6 strong {
+  padding: 2px 5px;
+  border-radius: 7px;
+}
+
+.year-header h6 strong:hover {
+  background-color: #D7D7D7;
+  cursor: pointer;
+}
+
+.year-btn {
+  width: 25px;
+  height: 20px;
+}
+
+.year-btn:hover {
+  border-radius: 7px;
+  background-color: #D7D7D7;
+  cursor: pointer;
 }
