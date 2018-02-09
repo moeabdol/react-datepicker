@@ -9,16 +9,19 @@ class Datepicker extends Component {
 
     this.state = {
       calendarVisible: false,
-      year: 0
+      year: 0,
+      month: '',
     };
   }
 
   componentWillMount() {
     const year = moment().year();
+    const month = moment().format('MMM');
 
     this.setState({
       ...this.state,
-      year
+      year,
+      month
     });
   }
 
@@ -65,6 +68,26 @@ class Datepicker extends Component {
     });
   };
 
+  onOneMonthBackClick = () => {
+    const oneMonthBack = moment().month(this.state.month)
+      .subtract(1, 'month').format('MMM');
+
+    this.setState({
+      ...this.state,
+      month: oneMonthBack
+    });
+  };
+
+  onOneMonthAheadClick = () => {
+    const oneMonthAhead = moment().month(this.state.month)
+      .add(1, 'month').format('MMM');
+
+    this.setState({
+      ...this.state,
+      month: oneMonthAhead
+    });
+  };
+
   render() {
     return (
       <div className="datepicker">
@@ -93,6 +116,8 @@ class Datepicker extends Component {
         {this.state.calendarVisible ?
           <Calendar
             {...this.state}
+            onOneMonthBackClick={this.onOneMonthBackClick}
+            onOneMonthAheadClick={this.onOneMonthAheadClick}
             onOneYearBackClick={this.onOneYearBackClick}
             onOneYearAheadClick={this.onOneYearAheadClick}
             onTenYearsBackClick={this.onTenYearsBackClick}
@@ -105,6 +130,10 @@ class Datepicker extends Component {
 
 const Calendar = props => (
   <div className="calendar">
+    <MonthHeader
+      {...props}
+      onOneMonthBackClick={props.onOneMonthBackClick}
+      onOneMonthAheadClick={props.onOneMonthAheadClick} />
     <YearHeader
       {...props}
       onOneYearBackClick={props.onOneYearBackClick}
@@ -117,26 +146,36 @@ const Calendar = props => (
 const YearHeader = props => (
   <div className="year-header">
     <i
-      onClick={props.onTenYearsBackClick}
-      className="fa fa-angle-double-left float-left year-btn"></i>
-    <i
       onClick={props.onOneYearBackClick}
       className="fa fa-angle-left float-left year-btn"></i>
     <i
-      onClick={props.onTenYearsAheadClick}
-      className="fa fa-angle-double-right float-right year-btn"></i>
+      onClick={props.onTenYearsBackClick}
+      className="fa fa-angle-double-left float-left year-btn"></i>
     <i
       onClick={props.onOneYearAheadClick}
       className="fa fa-angle-right float-right year-btn"></i>
-    <h6>
-      <strong>
-        {props.year}
-      </strong>
-    </h6>
+    <i
+      onClick={props.onTenYearsAheadClick}
+      className="fa fa-angle-double-right float-right year-btn"></i>
+    <strong>{props.year}</strong>
+  </div>
+);
+
+const MonthHeader = props => (
+  <div className="month-header">
+    <i
+      onClick={props.onOneMonthBackClick}
+      className="fa fa-angle-left float-left year-btn"></i>
+    <i
+      onClick={props.onOneMonthAheadClick}
+      className="fa fa-angle-right float-right year-btn"></i>
+    <strong>{props.month}</strong>
   </div>
 );
 
 Calendar.propTypes = {
+  onOneMonthBackClick: PropTypes.func,
+  onOneMonthAheadClick: PropTypes.func,
   onOneYearBackClick: PropTypes.func,
   onOneYearAheadClick: PropTypes.func,
   onTenYearsBackClick: PropTypes.func,
@@ -149,6 +188,12 @@ YearHeader.propTypes = {
   onOneYearAheadClick: PropTypes.func,
   onTenYearsBackClick: PropTypes.func,
   onTenYearsAheadClick: PropTypes.func
+};
+
+MonthHeader.propTypes = {
+  month: PropTypes.string,
+  onOneMonthBackClick: PropTypes.func,
+  onOneMonthAheadClick: PropTypes.func
 };
 
 export default Datepicker;

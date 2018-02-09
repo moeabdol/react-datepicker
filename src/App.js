@@ -9,7 +9,11 @@ class App extends Component {
   render() {
     return (
       <div className="App container">
-        <Datepicker />
+        <div className="row">
+          <div className="col">
+            <Datepicker />
+          </div>
+        </div>
       </div>
     );
   }

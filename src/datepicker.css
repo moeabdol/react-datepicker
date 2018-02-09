@@ -24,22 +24,16 @@
   padding: 10px;
 }
 
-.year-header {
+.year-header, .month-header {
   text-align: center;
 }
 
-.year-header h6 {
+.year-header h6, .month-header h6 {
   font-size: 15px;
 }
 
-.year-header h6 strong {
-  padding: 2px 5px;
-  border-radius: 7px;
-}
-
-.year-header h6 strong:hover {
-  background-color: #D7D7D7;
-  cursor: pointer;
+.year-header i {
+  margin: 3px 0;
 }
 
 .year-btn {
@@ -51,4 +45,12 @@
   border-radius: 7px;
   background-color: #D7D7D7;
   cursor: pointer;
+}
+
+.month-header strong {
+  font-size: 22px;
+}
+
+.month-header i {
+  margin: 5px 0;
 }
