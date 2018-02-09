@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import './datepicker.css';
+import onClickOutside from 'react-onclickoutside';
 
 class Datepicker extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      calendarVisible: false,
+      visible: false,
       year: 0,
       month: '',
     };
@@ -25,10 +26,12 @@ class Datepicker extends Component {
     });
   }
 
+  handleClickOutside = () => this.setState({ ...this.state, visible: false });
+
   onInputBoxClicked = () => {
     this.setState({
       ...this.state,
-      calendarVisible: !this.state.calendarVisible
+      visible: !this.state.visible
     });
   };
 
@@ -113,7 +116,7 @@ class Datepicker extends Component {
           </div>
         </div>
 
-        {this.state.calendarVisible ?
+        {this.state.visible ?
           <Calendar
             {...this.state}
             onOneMonthBackClick={this.onOneMonthBackClick}
@@ -196,4 +199,4 @@ MonthHeader.propTypes = {
   onOneMonthAheadClick: PropTypes.func
 };
 
-export default Datepicker;
+export default onClickOutside(Datepicker);
