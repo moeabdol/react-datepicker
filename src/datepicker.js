@@ -143,6 +143,7 @@ const Calendar = props => (
       onOneYearAheadClick={props.onOneYearAheadClick}
       onTenYearsBackClick={props.onTenYearsBackClick}
       onTenYearsAheadClick={props.onTenYearsAheadClick} />
+    <WeeksHeader />
   </div>
 );
 
@@ -173,6 +174,32 @@ const MonthHeader = props => (
       onClick={props.onOneMonthAheadClick}
       className="fa fa-angle-right float-right year-btn"></i>
     <strong>{props.month}</strong>
+  </div>
+);
+
+const WeeksHeader = () => (
+  <div className="weeks-header">
+    <div className="week-header">
+      SUN
+    </div>
+    <div className="week-header">
+      MON
+    </div>
+    <div className="week-header">
+      TUE
+    </div>
+    <div className="week-header">
+      WED
+    </div>
+    <div className="week-header">
+      THU
+    </div>
+    <div className="week-header">
+      FRI
+    </div>
+    <div className="week-header">
+      SAT
+    </div>
   </div>
 );
 
