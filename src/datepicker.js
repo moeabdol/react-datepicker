@@ -102,7 +102,7 @@ class Datepicker extends Component {
       if (day[0] === '0') day = parseInt(day[1]);
       else day = parseInt(day);
 
-      const selectedDate = moment().date(day).month(month).year(year);
+      const selectedDate = moment().month(month).year(year).date(day);
 
       this.setState({
         ...this.state,
