@@ -3,28 +3,41 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import './datepicker.css';
 import onClickOutside from 'react-onclickoutside';
+import _ from 'lodash';
+
+// const WEEK_DAYS = [
+//   'SUN',
+//   'MON',
+//   'TUE',
+//   'WED',
+//   'THU',
+//   'FRI',
+//   'SAT'
+// ];
 
 class Datepicker extends Component {
   constructor(props) {
     super(props);
 
+    const initialMoment = moment();
+
     this.state = {
       visible: false,
-      year: 0,
-      month: '',
+      year: initialMoment.year(),
+      month: initialMoment.month()
     };
   }
 
-  componentWillMount() {
-    const year = moment().year();
-    const month = moment().format('MMM');
-
-    this.setState({
-      ...this.state,
-      year,
-      month
-    });
-  }
+  // componentWillMount() {
+  //   const year = moment().year();
+  //   const month = moment().month();
+  //
+  //   this.setState({
+  //     ...this.state,
+  //     year,
+  //     month
+  //   });
+  // }
 
   handleClickOutside = () => this.setState({ ...this.state, visible: false });
 
@@ -73,7 +86,7 @@ class Datepicker extends Component {
 
   onOneMonthBackClick = () => {
     const oneMonthBack = moment().month(this.state.month)
-      .subtract(1, 'month').format('MMM');
+      .subtract(1, 'month').month();
 
     this.setState({
       ...this.state,
@@ -83,7 +96,7 @@ class Datepicker extends Component {
 
   onOneMonthAheadClick = () => {
     const oneMonthAhead = moment().month(this.state.month)
-      .add(1, 'month').format('MMM');
+      .add(1, 'month').month();
 
     this.setState({
       ...this.state,
@@ -143,7 +156,8 @@ const Calendar = props => (
       onOneYearAheadClick={props.onOneYearAheadClick}
       onTenYearsBackClick={props.onTenYearsBackClick}
       onTenYearsAheadClick={props.onTenYearsAheadClick} />
-    <WeeksHeader />
+    <Weeks
+      {...props} />
   </div>
 );
 
@@ -169,39 +183,81 @@ const MonthHeader = props => (
   <div className="month-header">
     <i
       onClick={props.onOneMonthBackClick}
-      className="fa fa-angle-left float-left year-btn"></i>
+      className="fa fa-angle-left float-left month-btn"></i>
     <i
       onClick={props.onOneMonthAheadClick}
-      className="fa fa-angle-right float-right year-btn"></i>
-    <strong>{props.month}</strong>
+      className="fa fa-angle-right float-right month-btn"></i>
+    <strong>{moment().month(props.month).format('MMM')}</strong>
   </div>
 );
 
-const WeeksHeader = () => (
-  <div className="weeks-header">
-    <div className="week-header">
-      SUN
-    </div>
-    <div className="week-header">
-      MON
-    </div>
-    <div className="week-header">
-      TUE
-    </div>
-    <div className="week-header">
-      WED
-    </div>
-    <div className="week-header">
-      THU
-    </div>
-    <div className="week-header">
-      FRI
-    </div>
-    <div className="week-header">
-      SAT
-    </div>
-  </div>
-);
+class Weeks extends Component {
+  // weeks = () => {
+  //   return _.range(5).map(weekNumber => {
+  //     return WEEK_DAYS.map((day, dayNumber) => {
+  //       // console.log(weekNumber, dayNumber, day);
+  //       if (weekNumber === 0 && dayNumber === startDate.day()) {
+  //         return (
+  //           <span key={`${weekNumber}_${dayNumber}`}>
+  //             1
+  //           </span>
+  //         );
+  //       } else if (weekNumber === 0 && dayNumber < startDate.day()) {
+  //         <span key={`${weekNumber}_${dayNumber}`}></span>
+  //       }
+  //     });
+  //   });
+  // };
+
+  render() {
+    const startDate = moment([this.props.year, this.props.month]);
+    const endDate = moment(startDate).endOf('month');
+    const diff = endDate.diff(startDate, 'days') + 1;
+
+    const days = [];
+    _.range(startDate.day()).map(() => {
+      days.push(false);
+    });
+
+    _.range(diff).map(i => {
+      days.push(('0' + (i + 1)).slice(-2));
+    });
+
+    _.range((5 * 7) - days.length).map(() => {
+      days.push(false);
+    });
+
+    const weeks = [];
+    while(days.length) weeks.push(days.splice(0, 7));
+
+    return (
+      <div className="weeks">
+        <table>
+          <thead>
+            <tr>
+              <td>SUN</td>
+              <td>MON</td>
+              <td>TUE</td>
+              <td>WED</td>
+              <td>THU</td>
+              <td>FRI</td>
+              <td>SAT</td>
+            </tr>
+          </thead>
+          <tbody>
+            {_.range(5).map(i => {
+              return <tr key={i}>
+                {_.range(7).map(j => {
+                  return <td key={Math.random(i * j)}>{weeks[i][j]}</td>;
+                })}
+              </tr>;
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
 
 Calendar.propTypes = {
   onOneMonthBackClick: PropTypes.func,
@@ -221,9 +277,14 @@ YearHeader.propTypes = {
 };
 
 MonthHeader.propTypes = {
-  month: PropTypes.string,
+  month: PropTypes.number,
   onOneMonthBackClick: PropTypes.func,
   onOneMonthAheadClick: PropTypes.func
+};
+
+Weeks.propTypes = {
+  year: PropTypes.number,
+  month: PropTypes.number
 };
 
 export default onClickOutside(Datepicker);

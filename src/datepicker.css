@@ -16,7 +16,7 @@
 .calendar {
   position: absolute;
   height: 200px;
-  width: 200px;
+  width: 210px;
   border: 1px solid #CED4DA;
   border-radius: 3px;
   margin-top: 3px;
@@ -24,7 +24,7 @@
   padding: 10px;
 }
 
-.year-header, .month-header, .weeks-header {
+.year-header, .month-header, .weeks-header, .weeks {
   text-align: center;
 }
 
@@ -36,13 +36,14 @@
   margin: 3px 0;
 }
 
-.year-btn {
-  width: 25px;
+.year-btn, .month-btn {
+  text-align: center;
+  width: 20px;
   height: 20px;
 }
 
-.year-btn:hover {
-  border-radius: 7px;
+.year-btn:hover, .month-btn:hover {
+  border-radius: 9px;
   background-color: #D7D7D7;
   cursor: pointer;
 }
@@ -60,4 +61,31 @@
   font-size: 10px;
   margin: 2px;
   font-weight: bold;
+}
+
+.weeks table,
+.weeks table tr,
+.weeks table td {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.weeks thead {
+  font-weight: bold;
+}
+
+.weeks tr {
+  line-height: 14px;
+}
+
+.weeks td {
+  font-size: 10px;
+  width: 25px;
+  height: 20px;
+  padding: 2px;
+}
+
+.weeks tbody tr td:hover {
+  background-color: #D7D7D7;
+  cursor: pointer;
 }
