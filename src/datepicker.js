@@ -5,16 +5,6 @@ import './datepicker.css';
 import onClickOutside from 'react-onclickoutside';
 import _ from 'lodash';
 
-// const WEEK_DAYS = [
-//   'SUN',
-//   'MON',
-//   'TUE',
-//   'WED',
-//   'THU',
-//   'FRI',
-//   'SAT'
-// ];
-
 class Datepicker extends Component {
   constructor(props) {
     super(props);
@@ -24,22 +14,22 @@ class Datepicker extends Component {
     this.state = {
       visible: false,
       year: initialMoment.year(),
-      month: initialMoment.month()
+      month: initialMoment.month(),
+      selectedDate: moment()
     };
   }
 
-  // componentWillMount() {
-  //   const year = moment().year();
-  //   const month = moment().month();
-  //
-  //   this.setState({
-  //     ...this.state,
-  //     year,
-  //     month
-  //   });
-  // }
+  handleClickOutside = () => {
+    const year = this.state.selectedDate.year();
+    const month = this.state.selectedDate.month();
 
-  handleClickOutside = () => this.setState({ ...this.state, visible: false });
+    this.setState({
+      ...this.state,
+      visible: false,
+      year,
+      month
+    });
+  };
 
   onInputBoxClicked = () => {
     this.setState({
@@ -104,6 +94,23 @@ class Datepicker extends Component {
     });
   };
 
+  onDateSelected = day => {
+    if (day) {
+      const year = this.state.year;
+      const month = this.state.month;
+
+      if (day[0] === '0') day = parseInt(day[1]);
+      else day = parseInt(day);
+
+      const selectedDate = moment().date(day).month(month).year(year);
+
+      this.setState({
+        ...this.state,
+        selectedDate
+      });
+    }
+  };
+
   render() {
     return (
       <div className="datepicker">
@@ -111,7 +118,7 @@ class Datepicker extends Component {
           <input
             type="text"
             className="form-control"
-            value={moment().format('YYYY-MM-DD')}
+            value={this.state.selectedDate.format('YYYY-MM-DD')}
             readOnly
             onClick={this.onInputBoxClicked} />
 
@@ -137,7 +144,8 @@ class Datepicker extends Component {
             onOneYearBackClick={this.onOneYearBackClick}
             onOneYearAheadClick={this.onOneYearAheadClick}
             onTenYearsBackClick={this.onTenYearsBackClick}
-            onTenYearsAheadClick={this.onTenYearsAheadClick} /> : null
+            onTenYearsAheadClick={this.onTenYearsAheadClick}
+            onDateSelected={this.onDateSelected} /> : null
         }
       </div>
     );
@@ -157,7 +165,8 @@ const Calendar = props => (
       onTenYearsBackClick={props.onTenYearsBackClick}
       onTenYearsAheadClick={props.onTenYearsAheadClick} />
     <Weeks
-      {...props} />
+      {...props}
+      onDateSelected={props.onDateSelected} />
   </div>
 );
 
@@ -192,23 +201,6 @@ const MonthHeader = props => (
 );
 
 class Weeks extends Component {
-  // weeks = () => {
-  //   return _.range(5).map(weekNumber => {
-  //     return WEEK_DAYS.map((day, dayNumber) => {
-  //       // console.log(weekNumber, dayNumber, day);
-  //       if (weekNumber === 0 && dayNumber === startDate.day()) {
-  //         return (
-  //           <span key={`${weekNumber}_${dayNumber}`}>
-  //             1
-  //           </span>
-  //         );
-  //       } else if (weekNumber === 0 && dayNumber < startDate.day()) {
-  //         <span key={`${weekNumber}_${dayNumber}`}></span>
-  //       }
-  //     });
-  //   });
-  // };
-
   render() {
     const startDate = moment([this.props.year, this.props.month]);
     const endDate = moment(startDate).endOf('month');
@@ -248,7 +240,22 @@ class Weeks extends Component {
             {_.range(5).map(i => {
               return <tr key={i}>
                 {_.range(7).map(j => {
-                  return <td key={Math.random(i * j)}>{weeks[i][j]}</td>;
+                  let selectedClass = '';
+                  let day = weeks[i][j][0] === '0' ?
+                    parseInt(weeks[i][j][1]) : parseInt(weeks[i][j]);
+
+                  if (this.props.year === this.props.selectedDate.year() &&
+                    this.props.month === this.props.selectedDate.month() &&
+                    day === this.props.selectedDate.date()) {
+                    selectedClass = 'selected text-white bg-primary';
+                  }
+
+                  return (
+                    <td
+                      onClick={() => this.props.onDateSelected(weeks[i][j])}
+                      className={`${selectedClass} ${weeks[i][j] ? '' : 'non-month-day'}`}
+                      key={Math.random(i * j)}>{weeks[i][j]}</td>
+                  );
                 })}
               </tr>;
             })}
@@ -265,7 +272,8 @@ Calendar.propTypes = {
   onOneYearBackClick: PropTypes.func,
   onOneYearAheadClick: PropTypes.func,
   onTenYearsBackClick: PropTypes.func,
-  onTenYearsAheadClick: PropTypes.func
+  onTenYearsAheadClick: PropTypes.func,
+  onDateSelected: PropTypes.func
 };
 
 YearHeader.propTypes = {
@@ -284,7 +292,9 @@ MonthHeader.propTypes = {
 
 Weeks.propTypes = {
   year: PropTypes.number,
-  month: PropTypes.number
+  month: PropTypes.number,
+  onDateSelected: PropTypes.func,
+  selectedDate: PropTypes.object
 };
 
 export default onClickOutside(Datepicker);

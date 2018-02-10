@@ -89,3 +89,8 @@
   background-color: #D7D7D7;
   cursor: pointer;
 }
+
+.weeks tbody tr td.non-month-day {
+  background-color: #FFFFFF;
+  cursor: auto;
+}
