@@ -1,8 +1,8 @@
 # React Hijri/Gregorian Datepicker
-A react component that collects date information in both the Gregorian and Hijri
-systems.
+A react input component that collects date information in both Gregorian and
+Hijri date formats.
 
 ## Dependencies
 * moment
 * moment-hijri
-* Bootstrap > 4
+* Bootstrap >= 4.0.0
