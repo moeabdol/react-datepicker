@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import './app.css';
-import Datepicker from './datepicker';
+import Datepicker from './datepicker/datepicker';
 
 class App extends Component {
   render() {
