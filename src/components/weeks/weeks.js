@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import _ from 'lodash';
 
 class Weeks extends Component {
   render() {
-    const startDate = moment([this.props.year, this.props.month]);
-    const endDate = moment(startDate).endOf('month');
-    const diff = endDate.diff(startDate, 'days') + 1;
+    const startDate = this.props.utils.startingDate(this.props.navigationDate);
+    const diff = this.props.utils.diffDate(this.props.navigationDate);
 
     const days = [];
     _.range(startDate.day()).map(() => {
@@ -44,12 +42,11 @@ class Weeks extends Component {
               return <tr key={i}>
                 {_.range(7).map(j => {
                   let selectedClass = '';
-                  let day = weeks[i][j][0] === '0' ?
+                  let date = weeks[i][j][0] === '0' ?
                     parseInt(weeks[i][j][1]) : parseInt(weeks[i][j]);
 
-                  if (this.props.year === this.props.selectedDate.year() &&
-                    this.props.month === this.props.selectedDate.month() &&
-                    day === this.props.selectedDate.date()) {
+                  if (this.props.utils.isSelectedDate(this.props.navigationDate,
+                    this.props.selectedDate,  date)) {
                     selectedClass = 'selected text-white bg-primary';
                   }
 
@@ -70,10 +67,10 @@ class Weeks extends Component {
 }
 
 Weeks.propTypes = {
-  year: PropTypes.number,
-  month: PropTypes.number,
+  utils: PropTypes.object,
   onDateSelected: PropTypes.func,
-  selectedDate: PropTypes.object
+  selectedDate: PropTypes.object,
+  navigationDate: PropTypes.object
 };
 
 export default Weeks;

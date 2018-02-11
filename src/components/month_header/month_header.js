@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { monthHeader } from '../../utils/gregorian_utils';
-
 const MonthHeader = props => (
   <div className="month-header">
     <i
@@ -11,11 +9,12 @@ const MonthHeader = props => (
     <i
       onClick={props.onOneMonthAheadClick}
       className="fa fa-angle-right float-right month-btn"></i>
-    <strong>{monthHeader(props.navigationDate)}</strong>
+    <strong>{props.utils.monthHeader(props.navigationDate)}</strong>
   </div>
 );
 
 MonthHeader.propTypes = {
+  utils: PropTypes.object,
   navigationDate: PropTypes.object,
   onOneMonthBackClick: PropTypes.func,
   onOneMonthAheadClick: PropTypes.func

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import MonthHeader from '../month_header/month_header';
 import YearHeader from '../year_header/year_header';
 import Weeks from '../weeks/weeks';
@@ -24,6 +23,7 @@ const Calendar = props => (
 );
 
 Calendar.propTypes = {
+  utils: PropTypes.object,
   onOneMonthBackClick: PropTypes.func,
   onOneMonthAheadClick: PropTypes.func,
   onOneYearBackClick: PropTypes.func,

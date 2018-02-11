@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
-import moment from 'moment';
+import PropTypes from 'prop-types';
 import './datepicker.css';
 import onClickOutside from 'react-onclickoutside';
-import {
-  oneYearAhead,
-  oneYearBack,
-  tenYearsAhead,
-  tenYearsBack,
-} from '../../utils/gregorian_utils';
 
 import Calendar from '../../components/calendar/calendar';
 
@@ -17,20 +11,16 @@ class Datepicker extends Component {
 
     this.state = {
       visible: false,
-      navigationDate: moment(),
-      selectedDate: moment()
+      navigationDate: this.props.utils.initialMoment(),
+      selectedDate: this.props.utils.initialMoment()
     };
   }
 
   handleClickOutside = () => {
-    const year = this.state.selectedDate.year();
-    const month = this.state.selectedDate.month();
-
     this.setState({
       ...this.state,
       visible: false,
-      year,
-      month
+      navigationDate: this.state.selectedDate
     });
   };
 
@@ -44,64 +34,50 @@ class Datepicker extends Component {
   onOneYearBackClick = () => {
     this.setState({
       ...this.state,
-      navigationDate: oneYearBack(this.state.navigationDate)
+      navigationDate: this.props.utils.oneYearBack(this.state.navigationDate)
     });
   };
 
   onOneYearAheadClick = () => {
     this.setState({
       ...this.state,
-      navigationDate: oneYearAhead(this.state.navigationDate)
+      navigationDate: this.props.utils.oneYearAhead(this.state.navigationDate)
     });
   };
 
   onTenYearsBackClick = () => {
     this.setState({
       ...this.state,
-      navigationDate: tenYearsBack(this.state.navigationDate)
+      navigationDate: this.props.utils.tenYearsBack(this.state.navigationDate)
     });
   };
 
   onTenYearsAheadClick = () => {
     this.setState({
       ...this.state,
-      navigationDate: tenYearsAhead(this.state.navigationDate)
+      navigationDate: this.props.utils.tenYearsAhead(this.state.navigationDate)
     });
   };
 
   onOneMonthBackClick = () => {
-    const oneMonthBack = moment().month(this.state.month)
-      .subtract(1, 'month').month();
-
     this.setState({
       ...this.state,
-      month: oneMonthBack
+      navigationDate: this.props.utils.oneMonthBack(this.state.navigationDate)
     });
   };
 
   onOneMonthAheadClick = () => {
-    const oneMonthAhead = moment().month(this.state.month)
-      .add(1, 'month').month();
-
     this.setState({
       ...this.state,
-      month: oneMonthAhead
+      navigationDate: this.props.utils.oneMonthAhead(this.state.navigationDate)
     });
   };
 
-  onDateSelected = day => {
-    if (day) {
-      const year = this.state.year;
-      const month = this.state.month;
-
-      if (day[0] === '0') day = parseInt(day[1]);
-      else day = parseInt(day);
-
-      const selectedDate = moment().month(month).year(year).date(day);
-
+  onDateSelected = date => {
+    if (date) {
       this.setState({
         ...this.state,
-        selectedDate
+        selectedDate: this.props.utils.dateSelected(this.state.navigationDate, date)
       });
     }
   };
@@ -113,7 +89,7 @@ class Datepicker extends Component {
           <input
             type="text"
             className="form-control"
-            value={this.state.selectedDate.format('YYYY-MM-DD')}
+            value={this.props.utils.inputDate(this.state.selectedDate)}
             readOnly
             onClick={this.onInputBoxClicked} />
 
@@ -123,10 +99,14 @@ class Datepicker extends Component {
               type="button"
               data-toggle="dropdown"
               aria-haspopup="true"
-              aria-expanded="false">Hijri</button>
+              aria-expanded="false">{this.props.calendarType}</button>
             <div className="dropdown-menu dropdown-menu-right">
-              <a className="dropdown-item" href="#">Hijri</a>
-              <a className="dropdown-item" href="#">Gregorian</a>
+              <a
+                onClick={() => this.props.onCalendarTypeChange('Gregorian')}
+                className="dropdown-item" href="#">Gregorian</a>
+              <a
+                onClick={() => this.props.onCalendarTypeChange('Hijri')}
+                className="dropdown-item" href="#">Hijri</a>
             </div>
           </div>
         </div>
@@ -134,6 +114,7 @@ class Datepicker extends Component {
         {this.state.visible ?
           <Calendar
             {...this.state}
+            utils={this.props.utils}
             onOneMonthBackClick={this.onOneMonthBackClick}
             onOneMonthAheadClick={this.onOneMonthAheadClick}
             onOneYearBackClick={this.onOneYearBackClick}
@@ -146,5 +127,11 @@ class Datepicker extends Component {
     );
   }
 }
+
+Datepicker.propTypes = {
+  utils: PropTypes.object,
+  onCalendarTypeChange: PropTypes.func,
+  calendarType: PropTypes.string
+};
 
 export default onClickOutside(Datepicker);

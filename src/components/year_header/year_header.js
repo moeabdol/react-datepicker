@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { yearHeader } from '../../utils/gregorian_utils';
-
 const YearHeader = props => (
   <div className="year-header">
     <i
@@ -17,11 +15,12 @@ const YearHeader = props => (
     <i
       onClick={props.onTenYearsAheadClick}
       className="fa fa-angle-double-right float-right year-btn"></i>
-    <strong>{yearHeader(props.navigationDate)}</strong>
+    <strong>{props.utils.yearHeader(props.navigationDate)}</strong>
   </div>
 );
 
 YearHeader.propTypes = {
+  utils: PropTypes.object,
   navigationDate: PropTypes.object,
   onOneYearBackClick: PropTypes.func,
   onOneYearAheadClick: PropTypes.func,
