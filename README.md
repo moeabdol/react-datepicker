@@ -6,3 +6,5 @@ Hijri date formats.
 * moment
 * moment-hijri
 * Bootstrap >= 4.0.0
+
+![react datepicker](./datepicker.png)
